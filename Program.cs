@@ -34,6 +34,11 @@ namespace LibraryCollectionWebApplication
                 name: "default",
                 pattern: "{controller=Home}/{action=Index}/{id?}");
 
+            app.UseRequestLocalization(new RequestLocalizationOptions
+            {
+                DefaultRequestCulture = new Microsoft.AspNetCore.Localization.RequestCulture("nl-NL")
+            });
+
             app.Run();
         }
     }

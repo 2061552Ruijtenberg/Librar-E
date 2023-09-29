@@ -19,4 +19,8 @@ html {
 
 body {
   margin-bottom: 60px;
+  background-image: url("/Images/saibatsu.png");
+  background-repeat: no-repeat;
+  background-size: 100%;
+  color: white;
 }

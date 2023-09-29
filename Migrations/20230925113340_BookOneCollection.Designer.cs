@@ -4,6 +4,7 @@ using LibraryCollectionWebApplication.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace LibraryCollectionWebApplication.Migrations
 {
     [DbContext(typeof(LibraryWebAppContext))]
-    partial class LibraryWebAppContextModelSnapshot : ModelSnapshot
+    [Migration("20230925113340_BookOneCollection")]
+    partial class BookOneCollection
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -49,6 +52,9 @@ namespace LibraryCollectionWebApplication.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int>("BookCollectionId")
+                        .HasColumnType("int");
+
                     b.Property<string>("Category")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -64,18 +70,33 @@ namespace LibraryCollectionWebApplication.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("UserId")
-                        .HasColumnType("int");
-
                     b.Property<decimal?>("Worth")
                         .HasPrecision(10, 2)
                         .HasColumnType("decimal(10,2)");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("UserId");
+                    b.HasIndex("BookCollectionId");
 
                     b.ToTable("Books");
+                });
+
+            modelBuilder.Entity("LibraryCollectionWebApplication.Models.BookCollection", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int?>("UserId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("BookCollections");
                 });
 
             modelBuilder.Entity("LibraryCollectionWebApplication.Models.Tag", b =>
@@ -129,16 +150,32 @@ namespace LibraryCollectionWebApplication.Migrations
 
             modelBuilder.Entity("LibraryCollectionWebApplication.Models.Book", b =>
                 {
-                    b.HasOne("LibraryCollectionWebApplication.Models.User", "User")
+                    b.HasOne("LibraryCollectionWebApplication.Models.BookCollection", "BookCollection")
                         .WithMany("Books")
+                        .HasForeignKey("BookCollectionId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("BookCollection");
+                });
+
+            modelBuilder.Entity("LibraryCollectionWebApplication.Models.BookCollection", b =>
+                {
+                    b.HasOne("LibraryCollectionWebApplication.Models.User", "User")
+                        .WithMany("BookCollection")
                         .HasForeignKey("UserId");
 
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("LibraryCollectionWebApplication.Models.User", b =>
+            modelBuilder.Entity("LibraryCollectionWebApplication.Models.BookCollection", b =>
                 {
                     b.Navigation("Books");
+                });
+
+            modelBuilder.Entity("LibraryCollectionWebApplication.Models.User", b =>
+                {
+                    b.Navigation("BookCollection");
                 });
 #pragma warning restore 612, 618
         }

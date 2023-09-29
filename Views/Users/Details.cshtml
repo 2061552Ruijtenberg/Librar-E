@@ -1,0 +1,45 @@
+﻿@model LibraryCollectionWebApplication.Models.User
+
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<h1>Details</h1>
+
+<div>
+    <h4>User</h4>
+    <hr />
+    <table class ="table table-hover">
+        <thead class="table-primary">
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.Name)
+                </th>
+                <th>
+                    @Html.DisplayFor(model => model.Name)
+                </th>
+            </tr>
+        </thead>
+        <tbody class="table-secondary">
+            <tr>
+            <th rowspan="@(Model.Books.Count + 1)">
+                Book Titles
+            </th>
+                @foreach (Book book in Model.Books)
+                {
+                    <tr>
+                        <td>
+                            <a asp-area="" asp-controller="Books" asp-action="Details" asp-route-id="@book.Id">@book.Title</a>
+                        </td>
+                    </tr>
+                }
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+<div>
+    <a asp-action="Edit" asp-route-id="@Model?.Id">Edit</a> |
+    <a asp-action="Index">Back to List</a>
+</div>

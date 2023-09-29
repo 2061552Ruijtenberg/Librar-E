@@ -4,6 +4,7 @@ using LibraryCollectionWebApplication.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace LibraryCollectionWebApplication.Migrations
 {
     [DbContext(typeof(LibraryWebAppContext))]
-    partial class LibraryWebAppContextModelSnapshot : ModelSnapshot
+    [Migration("20230925102528_PriceDecimalMigration")]
+    partial class PriceDecimalMigration
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -21,6 +24,21 @@ namespace LibraryCollectionWebApplication.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
+
+            modelBuilder.Entity("BookBookCollection", b =>
+                {
+                    b.Property<int>("BooksId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("CollectionsId")
+                        .HasColumnType("int");
+
+                    b.HasKey("BooksId", "CollectionsId");
+
+                    b.HasIndex("CollectionsId");
+
+                    b.ToTable("BookBookCollection");
+                });
 
             modelBuilder.Entity("BookTag", b =>
                 {
@@ -64,18 +82,31 @@ namespace LibraryCollectionWebApplication.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("UserId")
-                        .HasColumnType("int");
-
                     b.Property<decimal?>("Worth")
                         .HasPrecision(10, 2)
                         .HasColumnType("decimal(10,2)");
 
                     b.HasKey("Id");
 
+                    b.ToTable("Books");
+                });
+
+            modelBuilder.Entity("LibraryCollectionWebApplication.Models.BookCollection", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int?>("UserId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
                     b.HasIndex("UserId");
 
-                    b.ToTable("Books");
+                    b.ToTable("BookCollections");
                 });
 
             modelBuilder.Entity("LibraryCollectionWebApplication.Models.Tag", b =>
@@ -112,6 +143,21 @@ namespace LibraryCollectionWebApplication.Migrations
                     b.ToTable("Users");
                 });
 
+            modelBuilder.Entity("BookBookCollection", b =>
+                {
+                    b.HasOne("LibraryCollectionWebApplication.Models.Book", null)
+                        .WithMany()
+                        .HasForeignKey("BooksId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("LibraryCollectionWebApplication.Models.BookCollection", null)
+                        .WithMany()
+                        .HasForeignKey("CollectionsId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("BookTag", b =>
                 {
                     b.HasOne("LibraryCollectionWebApplication.Models.Book", null)
@@ -127,10 +173,10 @@ namespace LibraryCollectionWebApplication.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("LibraryCollectionWebApplication.Models.Book", b =>
+            modelBuilder.Entity("LibraryCollectionWebApplication.Models.BookCollection", b =>
                 {
                     b.HasOne("LibraryCollectionWebApplication.Models.User", "User")
-                        .WithMany("Books")
+                        .WithMany("BookCollection")
                         .HasForeignKey("UserId");
 
                     b.Navigation("User");
@@ -138,7 +184,7 @@ namespace LibraryCollectionWebApplication.Migrations
 
             modelBuilder.Entity("LibraryCollectionWebApplication.Models.User", b =>
                 {
-                    b.Navigation("Books");
+                    b.Navigation("BookCollection");
                 });
 #pragma warning restore 612, 618
         }

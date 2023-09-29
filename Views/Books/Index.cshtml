@@ -9,33 +9,36 @@
 <p>
     <a asp-action="Create">Create New</a>
 </p>
-<table class="table">
+<table class="table table-hover">
     <thead>
-        <tr>
-            <th>
+        <tr class="table-primary">
+            <th scope="col">
                 @Html.DisplayNameFor(model => model.Title)
             </th>
-            <th>
+            <th scope="col">
                 @Html.DisplayNameFor(model => model.Author)
             </th>
-            <th>
+            <th scope ="col">
                 @Html.DisplayNameFor(model => model.Description)
             </th>
-            <th>
+            <th scope="col">
                 @Html.DisplayNameFor(model => model.Price)
             </th>
-            <th>
+            <th scope="col">
                 @Html.DisplayNameFor(model => model.Worth)
             </th>
-            <th>
+            <th scope="col">
                 @Html.DisplayNameFor(model => model.Category)
+            </th>
+            <th scope="col">
+                @Html.DisplayNameFor(model => model.User)
             </th>
             <th></th>
         </tr>
     </thead>
     <tbody>
 @foreach (var item in Model) {
-        <tr>
+        <tr class="table-secondary">
             <td>
                 @Html.DisplayFor(modelItem => item.Title)
             </td>
@@ -55,9 +58,13 @@
                 @Html.DisplayFor(modelItem => item.Category)
             </td>
             <td>
+                @Html.DisplayFor(modelItem => item.User.Name)
+            </td>
+            <td>
                 <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
                 <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
                 <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+
             </td>
         </tr>
 }

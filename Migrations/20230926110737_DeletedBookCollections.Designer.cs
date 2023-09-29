@@ -4,6 +4,7 @@ using LibraryCollectionWebApplication.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace LibraryCollectionWebApplication.Migrations
 {
     [DbContext(typeof(LibraryWebAppContext))]
-    partial class LibraryWebAppContextModelSnapshot : ModelSnapshot
+    [Migration("20230926110737_DeletedBookCollections")]
+    partial class DeletedBookCollections
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -64,7 +67,7 @@ namespace LibraryCollectionWebApplication.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("UserId")
+                    b.Property<int>("UserId")
                         .HasColumnType("int");
 
                     b.Property<decimal?>("Worth")
@@ -131,7 +134,9 @@ namespace LibraryCollectionWebApplication.Migrations
                 {
                     b.HasOne("LibraryCollectionWebApplication.Models.User", "User")
                         .WithMany("Books")
-                        .HasForeignKey("UserId");
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("User");
                 });

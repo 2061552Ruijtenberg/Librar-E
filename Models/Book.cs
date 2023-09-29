@@ -1,4 +1,9 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+﻿using LibraryCollectionWebApplication.Migrations;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+using Microsoft.CodeAnalysis.Options;
+
+
 
 namespace LibraryCollectionWebApplication.Models
 {
@@ -8,14 +13,19 @@ namespace LibraryCollectionWebApplication.Models
         public string Title { get; set; } = null!;
         public string Author { get; set; } = null!;
         public string? Description { get; set; }
-
-        [Column(TypeName = "decimal(6,2)")]
-        public float Price { get; set; }
-        [Column(TypeName = "decimal(6,2)")]
-        public float Worth { get; set; }
+        [DataType(DataType.Currency)]
+        public Decimal? Price { get; set; }
+        [DataType(DataType.Currency)]
+        public Decimal? Worth { get; set; }
         public string Category { get; set; } = null!;
         public virtual ICollection<Tag>? Tags { get; set; }
-        public virtual ICollection<BookCollection>? Collections { get; set; }
+        public virtual User? User { get; set; }
+        public int? UserId { get; set; }
+
+        public Decimal? profit()
+        {
+            return Worth - Price;
+        }
 
     }
 }
