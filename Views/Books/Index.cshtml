@@ -55,15 +55,15 @@
                 @Html.DisplayFor(modelItem => item.Worth)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Category)
+                @Html.DisplayFor(modelItem => item.Category.CategoryName)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.User.Name)
             </td>
             <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                <a class = "a-dark" asp-action="Edit" asp-route-id="@item.Id">Edit</a> 
+                <a class = "a-dark" asp-action="Details" asp-route-id="@item.Id">Details</a>
+                <a class = "a-dark" asp-action="Delete" asp-route-id="@item.Id">Delete</a>
 
             </td>
         </tr>

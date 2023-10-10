@@ -7,7 +7,7 @@ namespace LibraryCollectionWebApplication.Data
     public class LibraryWebAppContext : DbContext
     {
         public DbSet<User> Users { get; set; }
-        public DbSet<Tag> Tags { get; set; }
+        public DbSet<Category> Categories { get; set; }
         public DbSet<Book> Books { get; set; }
 
         public LibraryWebAppContext(DbContextOptions<LibraryWebAppContext> options) : base(options)
