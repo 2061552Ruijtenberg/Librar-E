@@ -12,9 +12,9 @@ namespace LibraryCollectionWebApplication.Models.ViewModels
         public string? Price { get; set; }
         [DataType(DataType.Currency)]
         public string? Worth { get; set; }
-        public virtual Category Category { get; set; } = null!;
+        public virtual Category? Category { get; set; }
         public int CategoryId {  get; set; }
-        public virtual User User { get; set; } = null!;
+        public virtual User? User { get; set; }
         public int UserId { get; set; }
     }
 }

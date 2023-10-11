@@ -28,7 +28,7 @@ body {
 }
 
 .navbar{
-    position: relative;
+    position: sticky;
     width: 100%;
     height: 50px;
     z-index: 1;
@@ -42,4 +42,9 @@ h1, h2, h3, h4, p,a{
 
 .a-dark{
     color: black;
+}
+
+.btn {
+    margin-top: 25px;
+    margin-bottom: 25px;
 }

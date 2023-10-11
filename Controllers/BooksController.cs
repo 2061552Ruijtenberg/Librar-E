@@ -21,14 +21,14 @@ namespace LibraryCollectionWebApplication.Controllers
             _context = context;
         }
 
-        // GET: Books1
+        // GET: Books
         public async Task<IActionResult> Index()
         {
             var libraryWebAppContext = _context.Books.Include(b => b.Category).Include(b => b.User);
             return View(await libraryWebAppContext.ToListAsync());
         }
 
-        // GET: Books1/Details/5
+        // GET: Books/Details/5
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null || _context.Books == null)
@@ -48,7 +48,7 @@ namespace LibraryCollectionWebApplication.Controllers
             return View(book);
         }
 
-        // GET: Books1/Create
+        // GET: Books/Create
         public IActionResult Create()
         {
             ViewData["CategoryId"] = new SelectList(_context.Categories, "Id", "CategoryName");
@@ -56,7 +56,7 @@ namespace LibraryCollectionWebApplication.Controllers
             return View();
         }
 
-        // POST: Books1/Create
+        // POST: Books/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
@@ -92,12 +92,12 @@ namespace LibraryCollectionWebApplication.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["UserId"] = new SelectList(_context.Users, "Id", "Id", bookUpdate.UserId);
-            ViewData["CategoryId"] = new SelectList(_context.Categories, "Id", "Id", bookUpdate.CategoryId);
+            ViewData["UserId"] = new SelectList(_context.Users, "Id", "Name", bookUpdate.UserId);
+            ViewData["CategoryId"] = new SelectList(_context.Categories, "Id", "CategoryName", bookUpdate.CategoryId);
             return View(bookUpdate);
         }
 
-        // GET: Books1/Edit/5
+        // GET: Books/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null || _context.Books == null)
@@ -119,14 +119,14 @@ namespace LibraryCollectionWebApplication.Controllers
                 Price = book.Price?.ToString(),
                 Worth = book.Worth?.ToString(),
                 CategoryId = book.CategoryId,
-                UserId = book.UserId
+                UserId = book.UserId,
             };
-            ViewData["CategoryId"] = new SelectList(_context.Categories, "Id", "Id", viewModel.CategoryId);
-            ViewData["UserId"] = new SelectList(_context.Users, "Id", "Id", book.UserId);
+            ViewData["CategoryId"] = new SelectList(_context.Categories, "Id", "CategoryName", viewModel.CategoryId);
+            ViewData["UserId"] = new SelectList(_context.Users, "Id", "Name", viewModel.UserId);
             return View(viewModel);
         }
 
-        // POST: Books1/Edit/5
+        // POST: Books/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
@@ -152,27 +152,36 @@ namespace LibraryCollectionWebApplication.Controllers
 
             if (ModelState.IsValid)
             {
-                Book CreateBook = new Book()
+                try
                 {
-                    Id = bookUpdate.Id,
-                    Title = bookUpdate.Title,
-                    Author = bookUpdate.Author,
-                    Description = bookUpdate.Description,
-                    Price = newPrice,
-                    Worth = newWorth,
-                    CategoryId = bookUpdate.CategoryId,
-                    UserId = bookUpdate.UserId
-                };
-                _context.Add(CreateBook);
-                await _context.SaveChangesAsync();
+                    Book bookEdit = await _context.Books.FindAsync(id);
+                    bookEdit.Title = bookUpdate.Title;
+                    bookEdit.Author = bookUpdate.Author;
+                    bookEdit.Description = bookUpdate.Description;
+                    bookEdit.Price = newPrice;
+                    bookEdit.Worth = newWorth;
+                    bookEdit.CategoryId = bookUpdate.CategoryId;
+                    bookEdit.UserId = bookUpdate.UserId;
+                    _context.Update(bookEdit);
+                    await _context.SaveChangesAsync();
+                }
+                catch (DbUpdateConcurrencyException)
+                {
+                    if (!BookExists(bookUpdate.Id))
+                    {
+                        return NotFound();
+                    }
+                    else
+                    {
+                        throw;
+                    }
+                }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["UserId"] = new SelectList(_context.Users, "Id", "Id", bookUpdate.UserId);
-            ViewData["CategoryId"] = new SelectList(_context.Categories, "Id", "Id", bookUpdate.CategoryId);
             return View(bookUpdate);
         }
 
-        // GET: Books1/Delete/5
+        // GET: Books/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null || _context.Books == null)
@@ -192,7 +201,7 @@ namespace LibraryCollectionWebApplication.Controllers
             return View(book);
         }
 
-        // POST: Books1/Delete/5
+        // POST: Books/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
