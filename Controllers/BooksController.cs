@@ -24,7 +24,7 @@ namespace LibraryCollectionWebApplication.Controllers
         // GET: Books
         public async Task<IActionResult> Index()
         {
-            var libraryWebAppContext = _context.Books.Include(b => b.Category).Include(b => b.User);
+            var libraryWebAppContext = _context.Books.Include(b => b.Category);
             return View(await libraryWebAppContext.ToListAsync());
         }
 
@@ -38,7 +38,6 @@ namespace LibraryCollectionWebApplication.Controllers
 
             var book = await _context.Books
                 .Include(b => b.Category)
-                .Include(b => b.User)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (book == null)
             {
@@ -52,7 +51,6 @@ namespace LibraryCollectionWebApplication.Controllers
         public IActionResult Create()
         {
             ViewData["CategoryId"] = new SelectList(_context.Categories, "Id", "CategoryName");
-            ViewData["UserId"] = new SelectList(_context.Users, "Id", "Name");
             return View();
         }
 
@@ -61,7 +59,7 @@ namespace LibraryCollectionWebApplication.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Title,Author,Description,Price,Worth,CategoryId,UserId")] BookUpdateViewModel bookUpdate)
+        public async Task<IActionResult> Create([Bind("Id,Title,Author,Description,Price,Worth,CategoryId")] BookUpdateViewModel bookUpdate)
         {
             decimal newPrice;
             decimal newWorth;
@@ -86,13 +84,11 @@ namespace LibraryCollectionWebApplication.Controllers
                     Price = newPrice,
                     Worth = newWorth,
                     CategoryId = bookUpdate.CategoryId,
-                    UserId = bookUpdate.UserId
                 };
                 _context.Add(CreateBook);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["UserId"] = new SelectList(_context.Users, "Id", "Name", bookUpdate.UserId);
             ViewData["CategoryId"] = new SelectList(_context.Categories, "Id", "CategoryName", bookUpdate.CategoryId);
             return View(bookUpdate);
         }
@@ -119,10 +115,8 @@ namespace LibraryCollectionWebApplication.Controllers
                 Price = book.Price?.ToString(),
                 Worth = book.Worth?.ToString(),
                 CategoryId = book.CategoryId,
-                UserId = book.UserId,
             };
             ViewData["CategoryId"] = new SelectList(_context.Categories, "Id", "CategoryName", viewModel.CategoryId);
-            ViewData["UserId"] = new SelectList(_context.Users, "Id", "Name", viewModel.UserId);
             return View(viewModel);
         }
 
@@ -131,7 +125,7 @@ namespace LibraryCollectionWebApplication.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Title,Author,Description,Price,Worth,CategoryId,UserId")] BookUpdateViewModel bookUpdate)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Title,Author,Description,Price,Worth,CategoryId")] BookUpdateViewModel bookUpdate)
         {
             if (id != bookUpdate.Id)
             {
@@ -154,14 +148,13 @@ namespace LibraryCollectionWebApplication.Controllers
             {
                 try
                 {
-                    Book bookEdit = await _context.Books.FindAsync(id);
+                    Book? bookEdit = await _context.Books.FindAsync(id);
                     bookEdit.Title = bookUpdate.Title;
                     bookEdit.Author = bookUpdate.Author;
                     bookEdit.Description = bookUpdate.Description;
                     bookEdit.Price = newPrice;
                     bookEdit.Worth = newWorth;
                     bookEdit.CategoryId = bookUpdate.CategoryId;
-                    bookEdit.UserId = bookUpdate.UserId;
                     _context.Update(bookEdit);
                     await _context.SaveChangesAsync();
                 }
@@ -191,7 +184,6 @@ namespace LibraryCollectionWebApplication.Controllers
 
             var book = await _context.Books
                 .Include(b => b.Category)
-                .Include(b => b.User)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (book == null)
             {

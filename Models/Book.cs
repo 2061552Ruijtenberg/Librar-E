@@ -19,8 +19,6 @@ namespace LibraryCollectionWebApplication.Models
         public decimal? Worth { get; set; }
         public virtual Category? Category { get; set; }
         public int CategoryId { get; set; }
-        public virtual User? User { get; set; }
-        public int UserId { get; set; }
 
         public decimal? profit()
         {

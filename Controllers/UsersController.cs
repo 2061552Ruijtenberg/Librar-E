@@ -35,14 +35,14 @@ namespace LibraryCollectionWebApplication.Controllers
                 return NotFound();
             }
             //Include books in users
-            var user = await _context.Users.Include(x => x.Books)
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (user == null)
+            var collection = await _context.Collections.Include(x => x.Book).Include(x=>User)
+                .FirstOrDefaultAsync(m => m.UserID == id);
+            if (collection == null)
             {
                 return NotFound();
             }
 
-            return View(user);
+            return View(collection);
         }
 
         // GET: Users/Create
