@@ -19,6 +19,12 @@ namespace LibraryCollectionWebApplication.Models
         public decimal? Worth { get; set; }
         public virtual Category? Category { get; set; }
         public int CategoryId { get; set; }
+        public virtual ICollection<Tag>? Tags { get; set; }
+
+        public Book() 
+        {
+            Tags = new List<Tag>();
+        }
 
         public decimal? profit()
         {

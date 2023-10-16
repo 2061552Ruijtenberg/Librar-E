@@ -1,0 +1,8 @@
+﻿@model AssignedTagData
+@using LibraryCollectionWebApplication.Models.ViewModels
+
+<fieldset>
+	@Html.HiddenFor(model => model.Id)
+	@Html.CheckBoxFor(model => model.Assigned)
+	@Html.DisplayFor(model => model.Name)
+</fieldset>

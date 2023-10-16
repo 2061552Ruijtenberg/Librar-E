@@ -1,4 +1,6 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using LibraryCollectionWebApplication.Data;
+using Microsoft.IdentityModel.Protocols.OpenIdConnect;
+using System.ComponentModel.DataAnnotations;
 
 namespace LibraryCollectionWebApplication.Models.ViewModels
 {
@@ -14,7 +16,8 @@ namespace LibraryCollectionWebApplication.Models.ViewModels
         public string? Worth { get; set; }
         public virtual Category? Category { get; set; }
         public int CategoryId {  get; set; }
-        public virtual User? User { get; set; }
-        public int UserId { get; set; }
+        public virtual ICollection<AssignedTagData>? Tags { get; set; }
+
+
     }
 }

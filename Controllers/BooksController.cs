@@ -50,8 +50,9 @@ namespace LibraryCollectionWebApplication.Controllers
         // GET: Books/Create
         public IActionResult Create()
         {
+            var bookUpdateViewModel = new BookUpdateViewModel { Tags = PopulateTagData() };
             ViewData["CategoryId"] = new SelectList(_context.Categories, "Id", "CategoryName");
-            return View();
+            return View(bookUpdateViewModel);
         }
 
         // POST: Books/Create
@@ -59,7 +60,7 @@ namespace LibraryCollectionWebApplication.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Title,Author,Description,Price,Worth,CategoryId")] BookUpdateViewModel bookUpdate)
+        public async Task<IActionResult> Create([Bind("Id,Title,Author,Description,Price,Worth,CategoryId,Tags")] BookUpdateViewModel bookUpdate)
         {
             decimal newPrice;
             decimal newWorth;
@@ -83,8 +84,9 @@ namespace LibraryCollectionWebApplication.Controllers
                     Description = bookUpdate.Description,
                     Price = newPrice,
                     Worth = newWorth,
-                    CategoryId = bookUpdate.CategoryId,
+                    CategoryId = bookUpdate.CategoryId
                 };
+                AddOrUpdateTags(CreateBook,bookUpdate.Tags);
                 _context.Add(CreateBook);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
@@ -215,6 +217,36 @@ namespace LibraryCollectionWebApplication.Controllers
         private bool BookExists(int id)
         {
           return (_context.Books?.Any(e => e.Id == id)).GetValueOrDefault();
+        }
+
+        private ICollection<AssignedTagData> PopulateTagData()
+        {
+            var tags = _context.TagList;
+            var assignedTags = new List<AssignedTagData>();
+
+            foreach (var tag in tags)
+            {
+                assignedTags.Add(new AssignedTagData
+                {
+                    Id = tag.Id,
+                    Name = tag.Name,
+                    Assigned = false
+                });
+            }
+            return assignedTags;
+        }
+
+        private void AddOrUpdateTags(Book book, IEnumerable<AssignedTagData> tags)
+        {
+            foreach (var tag in tags)
+            {
+                if (tag.Assigned)
+                {
+                    var newTag = new Tag { Id = tag.Id, Name = tag.Name };
+                    _context.TagList.Attach(newTag);
+                    book.Tags.Add(newTag);
+                }
+            }
         }
     }
 }

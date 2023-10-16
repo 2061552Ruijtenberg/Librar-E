@@ -4,13 +4,14 @@
     ViewData["Title"] = "Create";
 }
 
-<h1>CreateUpdate</h1>
+<h1>Create</h1>
 
-<h4>BookUpdateViewModel</h4>
+<h4>Book</h4>
 <hr />
 <div class="row">
     <div class="col-md-4">
         <form asp-action="Create">
+
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
                 <label asp-for="Title" class="control-label"></label>
@@ -39,14 +40,17 @@
             </div>
             <div class="form-group">
                 <label asp-for="CategoryId" class="control-label"></label>
-                <select asp-for="CategoryId" class ="form-control" asp-items="ViewBag.CategoryId"></select>
+                <select asp-for="CategoryId" class="form-control" asp-items="ViewBag.CategoryId"></select>
             </div>
-            <fieldset>
-                @Html.EditorFor(x => x.Tags)
-            </fieldset>
+            <div class="form-group">
+                <label asp-for="Tags" class="control-label"></label>
+                <select asp-for="Tags" class="form-control" asp-items="ViewBag.Tags"></select>
+            </div>
+
             <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-primary" />
             </div>
+
         </form>
     </div>
 </div>

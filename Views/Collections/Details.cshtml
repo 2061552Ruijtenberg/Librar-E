@@ -12,9 +12,12 @@
     <dl class="row">
         @foreach(var item in Model)
         {
-            <dt class="col-sm-2">
-                @item.Book?.Title
+            <dt>
+                @item.Name
             </dt>
+            <dd class="col-sm-2">
+                @item.Book?.Title
+            </dd>
             <dd class="col-sm-10">
                 @item.Book?.Author
             </dd>
