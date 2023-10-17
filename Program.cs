@@ -13,6 +13,12 @@ namespace LibraryCollectionWebApplication
             builder.Services.AddControllersWithViews();
             builder.Services.AddDbContext<LibraryWebAppContext>(DbContextOptions => DbContextOptions.UseSqlServer(builder.Configuration.GetConnectionString("LibraryConnection")));
 
+            //Add Quote API
+            builder.Services.AddHttpClient(name: "quotes-Api", configureClient: options =>
+            {
+                options.BaseAddress = new Uri("https://quotel-quotes.p.rapidapi.com/quotes/random");
+            });
+
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.

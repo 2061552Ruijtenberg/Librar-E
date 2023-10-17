@@ -38,6 +38,7 @@ namespace LibraryCollectionWebApplication.Controllers
 
             var book = await _context.Books
                 .Include(b => b.Category)
+                .Include(b => b.Tags)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (book == null)
             {
@@ -117,6 +118,7 @@ namespace LibraryCollectionWebApplication.Controllers
                 Price = book.Price?.ToString(),
                 Worth = book.Worth?.ToString(),
                 CategoryId = book.CategoryId,
+                Tags = PopulateTagData()
             };
             ViewData["CategoryId"] = new SelectList(_context.Categories, "Id", "CategoryName", viewModel.CategoryId);
             return View(viewModel);
@@ -157,6 +159,7 @@ namespace LibraryCollectionWebApplication.Controllers
                     bookEdit.Price = newPrice;
                     bookEdit.Worth = newWorth;
                     bookEdit.CategoryId = bookUpdate.CategoryId;
+                    AddOrUpdateTags(bookEdit, bookUpdate.Tags);
                     _context.Update(bookEdit);
                     await _context.SaveChangesAsync();
                 }

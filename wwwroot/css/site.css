@@ -48,3 +48,9 @@ h1, h2, h3, h4, p,a{
     margin-top: 25px;
     margin-bottom: 25px;
 }
+
+.text-end{
+    position: absolute;
+    right: 25px;
+    bottom: 50px;
+}

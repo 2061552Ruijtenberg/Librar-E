@@ -1,4 +1,5 @@
-﻿@{
+﻿@model LibraryCollectionWebApplication.Models.API.Quote
+@{
     ViewData["Title"] = "Home Page";
 }
 
@@ -6,3 +7,13 @@
     <h1>Welcome</h1>
     <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
 </div>
+<figure class="text-end">
+    <blockquote class="blockquote">
+        <p class="mb-0">
+            @Model.quote
+        </p>
+    </blockquote>
+    <figcaption class="blockquote-footer">
+        @Model.name<cite title="Author Profession">    @Model.profession</cite>
+    </figcaption>
+</figure>

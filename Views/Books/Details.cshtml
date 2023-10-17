@@ -52,7 +52,17 @@
         <dd class="col-sm-10">
             @Model.profit()
         </dd>
+        <dt class="col-sm-2">
+            Tags
+        </dt>
+        <dd class="col-sm-10">
+        @foreach (var tag in Model.Tags)
+        {
+            @tag.Name<br />
+        }
+        </dd>
     </dl>
+
 </div>
 <div>
     <a asp-action="Edit" asp-route-id="@Model?.Id">Edit</a> |
