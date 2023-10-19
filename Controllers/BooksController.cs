@@ -222,6 +222,7 @@ namespace LibraryCollectionWebApplication.Controllers
           return (_context.Books?.Any(e => e.Id == id)).GetValueOrDefault();
         }
 
+        //Collect all tags for the view and convert them to AssignedTag
         private ICollection<AssignedTagData> PopulateTagData()
         {
             var tags = _context.TagList;
@@ -239,6 +240,7 @@ namespace LibraryCollectionWebApplication.Controllers
             return assignedTags;
         }
 
+        //Add Tags to the books (convert them from assignedTag to normal Tag)
         private void AddOrUpdateTags(Book book, IEnumerable<AssignedTagData> tags)
         {
             foreach (var tag in tags)

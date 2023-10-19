@@ -22,6 +22,7 @@ namespace LibraryCollectionWebApplication.Controllers
             HttpRequestMessage httpRequest = new HttpRequestMessage
             {
                 Method = HttpMethod.Post,
+                //API key and connection thingy
                 Headers =
                 {
                  { "X-RapidAPI-Key", "63b3961830mshfd90caab0afc5e1p1ecb8ajsnb5bd31d0d030" },
